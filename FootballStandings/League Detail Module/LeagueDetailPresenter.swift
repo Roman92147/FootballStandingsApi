@@ -55,22 +55,23 @@ extension LeagueDetailPresenter: LeagueDetailPresenterProtocol {
     for i in 0 ..< model.data!.standings!.count {
       
       var logo: Data?
-//      DispatchQueue.global().async { [weak self] in
-//        guard let url = URL(string: model.data?.standings?[i].team?.logos?[0].href ?? ""), let imageData = try? Data(contentsOf: url) else {
-//          logo = nil
-//          return
-//        }
-//        let index = i
-//
-//        guard let selfUnw = self else { return }
-//        selfUnw.tablePresenter.model.data[i].logo = imageData
-//        selfUnw.view.setTeamImage(index: index)
-//      }
-      
-      
-      if let url = URL(string: model.data?.standings?[i].team?.logos?[0].href ?? ""), let imageData = try? Data(contentsOf: url) {
-        logo = imageData
+      DispatchQueue.global().async(qos: .userInteractive) { [weak self] in
+        guard let url = URL(string: model.data?.standings?[i].team?.logos?[0].href ?? ""), let imageData = try? Data(contentsOf: url) else {
+          logo = nil
+          return
+        }
+        DispatchQueue.main.async { [weak self] in
+          let index = i
+          guard let selfUnw = self else { return }
+          selfUnw.tablePresenter.model.data[i].logo = imageData
+          selfUnw.view.setTeamImage(index: index)
+        }
       }
+      
+      
+//      if let url = URL(string: model.data?.standings?[i].team?.logos?[0].href ?? ""), let imageData = try? Data(contentsOf: url) {
+//        logo = imageData
+//      }
       
       
       var league: LeagueDeatilTableModelProtocol?

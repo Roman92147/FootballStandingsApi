@@ -123,8 +123,6 @@ extension LeagueDetailTableView {
 // MARK: Set Team Image
 extension LeagueDetailTableView {
   func setTeamImage(index: Int) {
-    DispatchQueue.main.async {
-      self.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-    }
+    self.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
   }
 }
